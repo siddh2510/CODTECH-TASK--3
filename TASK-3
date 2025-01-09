@@ -1,0 +1,111 @@
+package Topcodes;
+import java.io.*;
+import java.util.Scanner;
+
+public class CODTECH1 {
+
+	
+	//public class Main {
+
+	    public static void main(String[] args) {
+	        Scanner scanner = new Scanner(System.in);
+
+	        while (true) {  // Loop to allow multiple selections
+	            System.out.println("\nFile Operations: Read, Write, Modify");
+	            System.out.println("1. Write to a file");
+	            System.out.println("2. Read from a file");
+	            System.out.println("3. Modify a file");
+	            System.out.println("4. Exit");
+	            System.out.print("Choose an option (1-4): ");
+
+	            int choice = scanner.nextInt();
+	            scanner.nextLine(); // Consume the newline after nextInt()
+
+	            switch (choice) {
+	                case 1:
+	                    writeFile(scanner);
+	                    break;
+	                case 2:
+	                    readFile(scanner);
+	                    break;
+	                case 3:
+	                    modifyFile(scanner);
+	                    break;
+	                case 4:
+	                    System.out.println("Exiting the program.");
+	                    scanner.close();
+	                    return;  // Exit the loop and end the program
+	                default:
+	                    System.out.println("Invalid choice. Please try again.");
+	            }
+	        }
+	    }
+
+	    private static void writeFile(Scanner scanner) {
+	        System.out.print("Enter the file name to write to: ");
+	        String fileName = scanner.nextLine();
+
+	        System.out.println("Enter text to write to the file (type 'exit' on a new line to finish):");
+	        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+	            String line;
+	            while (!(line = scanner.nextLine()).equalsIgnoreCase("exit")) {
+	                writer.write(line);
+	                writer.newLine();
+	            }
+	            System.out.println("Content written to " + fileName);
+	        } catch (IOException e) {
+	            System.err.println("Error writing to file: " + e.getMessage());
+	        }
+	    }
+
+	    private static void readFile(Scanner scanner) {
+	        System.out.print("Enter the file name to read from: ");
+	        String fileName = scanner.nextLine();
+
+	        File file = new File(fileName);
+	        if (!file.exists()) {
+	            System.out.println("The file " + fileName + " does not exist.");
+	            System.out.print("Do you want to create it? (yes/no): ");
+	            String response = scanner.nextLine();
+
+	            if (response.equalsIgnoreCase("yes")) {
+	                try {
+	                    file.createNewFile();  // Creates a new file if it doesn't exist
+	                    System.out.println("New file " + fileName + " created.");
+	                } catch (IOException e) {
+	                    System.err.println("Error creating the file: " + e.getMessage());
+	                    return;
+	                }
+	            } else {
+	                return;
+	            }
+	        }
+
+	        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+	            String line;
+	            System.out.println("Content of " + fileName + ":");
+	            while ((line = reader.readLine()) != null) {
+	                System.out.println(line);
+	            }
+	        } catch (IOException e) {
+	            System.err.println("Error reading from file: " + e.getMessage());
+	        }
+	    }
+
+	    private static void modifyFile(Scanner scanner) {
+	        System.out.print("Enter the file name to modify: ");
+	        String fileName = scanner.nextLine();
+
+	        System.out.println("Enter new content for the file (type 'exit' on a new line to finish):");
+	        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+	            String line;
+	            while (!(line = scanner.nextLine()).equalsIgnoreCase("exit")) {
+	                writer.write(line);
+	                writer.newLine();
+	            }
+	            System.out.println("Content of " + fileName + " has been updated.");
+	        } catch (IOException e) {
+	            System.err.println("Error modifying the file: " + e.getMessage());
+	        }
+	    }
+	}
